@@ -5,13 +5,11 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
-import org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException;
-
 import com.bss.jpa.tutorial.entity.Member;
 
 public class Update 
 {
-    public static void main(String[] args) throws JdbcSQLIntegrityConstraintViolationException {
+    public static void main(String[] args) {
     	EntityManagerFactory emf = Persistence.createEntityManagerFactory("hello");
     	EntityManager em = emf.createEntityManager();
     	EntityTransaction tx = em.getTransaction();
@@ -20,6 +18,7 @@ public class Update
     	tx.begin();
     	
     	try{
+    		//SELECT 쿼리 날림
     		Member member = em.find(Member.class, 100L);
     		System.out.println("---------------------");
     		

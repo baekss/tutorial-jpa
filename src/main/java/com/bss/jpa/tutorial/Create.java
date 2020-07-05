@@ -11,28 +11,27 @@ import com.bss.jpa.tutorial.entity.Member;
 
 public class Create 
 {
-    public static void main(String[] args) throws JdbcSQLIntegrityConstraintViolationException {
+    public static void main(String[] args) {
     	EntityManagerFactory emf = Persistence.createEntityManagerFactory("hello");
     	EntityManager em = emf.createEntityManager();
     	EntityTransaction tx = em.getTransaction();
     	
-    	//트랜잭션 시작
     	tx.begin();
     	
     	try{
     		//비영속상태
-        	Member member = new Member();
+    		Member member = new Member();
         	member.setId(100L);
         	member.setName("백승석");
-        	
         	Member member2 = new Member();
         	member2.setId(101L);
         	member2.setName("홍길동");
         	
-        	//영속상태
+        	//영속상태. insert 쿼리를 날리는 것은 아님. 1차캐시에 저장.
         	em.persist(member);
         	em.persist(member2);
         	
+        	//insert쿼리 날림
         	tx.commit();
     	}catch(Exception e){
     		e.printStackTrace();

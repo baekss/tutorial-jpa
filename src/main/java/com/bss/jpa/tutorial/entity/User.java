@@ -8,8 +8,11 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -19,8 +22,13 @@ import com.bss.jpa.tutorial.enumerated.RoleType;
 
 @Entity
 @Table(name="MEMBER")
+@SequenceGenerator(
+name = "MEMBER_SEQ_GENERATOR"
+, sequenceName = "MEMBER_SEQUENCE" //시퀀스 테이블명
+, initialValue = 1, allocationSize = 10) //allocationSize 는 해당 값의 시퀀스를 미리 로딩시켜놓고 메모리에서 가져다 쓴다.(그때그때 시퀀스 채번 쿼리 안 날림.)
 public class User {
 	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MEMBER_SEQ_GENERATOR") //시퀀스 테이블 사용 방법
 	private Long id;
 	
 	@Column(name="name", nullable=false)
