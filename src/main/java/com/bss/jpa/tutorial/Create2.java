@@ -18,7 +18,7 @@ public class Create2
     	
     	try{
     		Customer customer = new Customer();
-    		customer.setCustomerName("백승석");
+    		customer.setCustomerName("S.S. BAEK");
     		customer.setAge(33);
     		
     		Customer customer2 = new Customer();

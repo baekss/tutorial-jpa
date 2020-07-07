@@ -24,7 +24,7 @@ public class Update
     		
     		System.out.println("Name : "+member.getName());
     		//member.setName("S.S. BAEK");
-    		member.setName(new String("백승석"));
+    		member.setName(new String("S.S. BAEK"));
     		
     		//member(primary key 100)가 setter를 통해 속성을 set했을 때 무조건 update 쿼리를 날리는 것은 아니다. 
     		//String의 경우 hashCode와 equals를 통해 변경이 맞다면 update 쿼리를 날린다.

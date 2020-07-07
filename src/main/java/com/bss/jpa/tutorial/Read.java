@@ -22,7 +22,7 @@ public class Read
     	try{
     		User user = new User();
     		//id는 자동생성 전략 썼으므로 null이 되게 한다.
-    		user.setUserName("백승석");
+    		user.setUserName("S.S. BAEK");
     		user.setCreateDate(new Date());
     		
     		User user2 = new User();

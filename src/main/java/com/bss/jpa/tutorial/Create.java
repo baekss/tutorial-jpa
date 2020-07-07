@@ -22,7 +22,7 @@ public class Create
     		//비영속상태
     		Member member = new Member();
         	member.setId(100L);
-        	member.setName("백승석");
+        	member.setName("S.S. BAEK");
         	Member member2 = new Member();
         	member2.setId(101L);
         	member2.setName("홍길동");
