@@ -1,6 +1,7 @@
 package com.bss.jpa.shop;
 
 import java.time.LocalDateTime;
+import java.util.stream.Stream;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -33,6 +34,7 @@ public class Main {
     		System.out.println("</-------시퀀스로 primary key 가져오느라 call next value for hibernate_sequence------->");
     		
     		Order order = new Order();
+    		//반드시 영속화시킨 객체를 set 한다.
     		order.setClient(client);
     		order.setOrderDate(LocalDateTime.now());
     		order.setStatus(OrderStatus.ORDER);
@@ -40,6 +42,27 @@ public class Main {
     		em.persist(order); //시퀀스로 primary key 가져오느라 call next value for hibernate_sequence
     		System.out.println("</-------시퀀스로 primary key 가져오느라 call next value for hibernate_sequence------->");
     		
+    		Order order2 = new Order();
+    		order2.setClient(client);
+    		order2.setOrderDate(LocalDateTime.now());
+    		order2.setStatus(OrderStatus.CANCEL);
+    		em.persist(order2);
+    		
+    		em.flush(); //insert쿼리만 날림. 아직 commit은 안함.
+    		em.clear(); //1차 캐시 비움
+    		
+    		Order findOrder = em.find(Order.class, order.getId()); //client와 outer join 으로 하여 select 쿼리 날림 Order 결과 얻어옴. insert commit 전이지만 read uncommited(dirty read) 컨셉처럼 이해바람
+    		Order findOrder2 = em.find(Order.class, order2.getId()); //client와 outer join 으로 하여 select 쿼리 날림 Order 결과 얻어옴. insert commit 전이지만 read uncommited(dirty read) 컨셉처럼 이해바람
+    		Stream<Order> orders = Stream.of(findOrder, findOrder2);
+    		//orders 스트림에서 주문번호와 주문상태 보기
+    		orders.map(o -> "주문번호 : "+o.getId()+". 주문상태 : "+o.getStatus()).forEach(System.out::println);
+    		
+    		Stream<Client> clients = Stream.of(findOrder.getClient(), findOrder2.getClient());
+    		
+    		//clients에는 같은 인원에 대해서 하나로 치부하기 위해 distinct 메소드 호출
+    		clients.distinct().flatMap(c->c.getOrders().stream())
+    		//select from ORDERS 쿼리 날림 
+    		.forEach( (o) -> { System.out.println("주문번호 : "+o.getId()+". 주문상태 : "+o.getStatus()); } );
         	tx.commit(); //insert문 flush and commit
     	}catch(Exception e){
     		e.printStackTrace();
