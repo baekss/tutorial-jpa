@@ -18,8 +18,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
-import com.bss.jpa.tutorial.enumerated.RoleType;
-
 @Entity
 @Table(name="MEMBER")
 @SequenceGenerator(
