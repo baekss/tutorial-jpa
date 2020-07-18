@@ -8,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -27,12 +28,18 @@ public class Order {
 	//@Column(name="CLIENT_ID")
 	//private Long clientId; //Order에서 clientId값 보다 Client 객체를 갖는 것이 더 자연스럽다.(객체지향적이지도 않고 객체그래프도 사용 못함)
 	
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	//ORDERS 테이블에 명시한 FK 컬럼명을 쓰는 것이다. (CLIENT 테이블에 FK로 참조시킨 컬럼명(ex. primary key of CLIENT TABLE) 아님)
 	@JoinColumn(name="FK_CLIENT_ID")
 	private Client client; //하나의 주문은 하나의 인원에게 귀속된다. (인원 1명 - 주문 N개)
 	
-	@OneToOne
+	/*
+	@ManyToOne
+	@JoinColumn(name="FK_CLIENT_ID", insertable=false, updatable=false)
+	private Client client;
+	*/
+	
+	@OneToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="DELIVERY_ID")
 	private Delivery delivery;
 	

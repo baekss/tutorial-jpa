@@ -50,7 +50,7 @@ public class Main {
     		
     		em.flush(); //insert쿼리만 날림. 아직 commit은 안함.
     		em.clear(); //1차 캐시 비움
-    		
+    		System.out.println("-----------------------flush & clear-----------------------");
     		Order findOrder = em.find(Order.class, order.getId()); //client와 outer join 으로 하여 select 쿼리 날림 Order 결과 얻어옴. insert commit 전이지만 read uncommited(dirty read) 컨셉처럼 이해바람
     		Order findOrder2 = em.find(Order.class, order2.getId()); //client와 outer join 으로 하여 select 쿼리 날림 Order 결과 얻어옴. insert commit 전이지만 read uncommited(dirty read) 컨셉처럼 이해바람
     		Stream<Order> orders = Stream.of(findOrder, findOrder2);
