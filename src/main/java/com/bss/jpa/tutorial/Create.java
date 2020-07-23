@@ -2,7 +2,6 @@ package com.bss.jpa.tutorial;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.Embeddable;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
@@ -41,6 +40,8 @@ public class Create
         	//값 타입 객체는 setter를 없애서 불변객체로 만들자
         	//수정하고 싶을 땐 새로운 객체를 만들어 다시 할당한다.
         	//member.getAddress().setCity("경기");
+        	
+        	member2.setAddress(new Address("경기","경기로","123-4567"));
         	
         	//insert쿼리 날림
         	tx.commit();
