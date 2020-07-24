@@ -20,7 +20,10 @@ public class JPQLMain {
     	tx.begin();
     	
     	try{
-    		Stream<Order> stream = em.createQuery("SELECT o FROM Order o WHERE status = :status")
+    		//JPQL은 테이블이 아닌 객체를 대상으로 질의한다.
+    		//객체명은 엔티티명@Entity(name="Order")으로 하여 질의 한다.
+    		//객체는 별칭(Order o)을 줘서 사용한다.
+    		Stream<Order> stream = em.<Order>createQuery("SELECT o FROM Order o WHERE status = :status", Order.class)
     									.setParameter("status", OrderStatus.CANCEL).getResultStream();
     		System.out.println("------------------Order 객체에 대한 JPQL 끝------------------");
     		stream.forEach(o->System.out.println(o.getStatus())); //연관관계인 Client를 select 하는 쿼리가 날라감

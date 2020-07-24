@@ -7,6 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
 
 import com.bss.jpa.tutorial.entity.User;
 
@@ -34,7 +35,8 @@ public class Read
     		em.persist(user);
     		em.persist(user2);
     		System.out.println("-----------------------");
-    		List<User> list = em.createQuery("SELECT u FROM User u").getResultList(); //persist 한 데이터를 조회에 포함시키게 하기 위해 insert문 flush 발생시킨다.
+    		TypedQuery<User> query = em.<User>createQuery("SELECT u FROM User u", User.class);
+    		List<User> list =  query.getResultList(); //persist 한 데이터를 조회에 포함시키게 하기 위해 insert문 flush 발생시킨다.
     		list.stream().map((u)->{return u.getUserName();}).forEach(System.out::println);
         	tx.commit();
     	}catch(Exception e){
