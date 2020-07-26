@@ -24,7 +24,8 @@ public class JPQLMain {
     		//객체명은 엔티티명@Entity(name="Order")으로 하여 질의 한다.
     		//객체는 별칭(Order o)을 줘서 사용한다.
     		Stream<Order> stream = em.<Order>createQuery("SELECT o FROM Order o WHERE status = :status", Order.class)
-    									.setParameter("status", OrderStatus.CANCEL).getResultStream();
+    											//enum 타입 바인딩					
+    											.setParameter("status", OrderStatus.CANCEL).getResultStream();
     		System.out.println("------------------Order 객체에 대한 JPQL 끝------------------");
     		stream.forEach(o->System.out.println(o.getStatus())); //연관관계인 Client를 select 하는 쿼리가 날라감
     		System.out.println("------------------JPQL RESULT 끝------------------");

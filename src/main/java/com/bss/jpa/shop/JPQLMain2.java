@@ -1,5 +1,7 @@
 package com.bss.jpa.shop;
 
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -81,7 +83,7 @@ public class JPQLMain2 {
     		List<OrderDto> orderDtos = query.getResultList();
     		orderDtos.forEach((dto)->{System.out.println(dto.getId()+" "+dto.getStatus());});
     		
-    		//페이징 쿼리
+    		//페이징 쿼리, Between 쿼리
     		/**
     		select 
 	            order0_.ORDER_ID as ORDER_ID1_14_, 
@@ -95,11 +97,14 @@ public class JPQLMain2 {
             	order0_.ORDER_ID desc 
             	limit 5 offset 1
     		*/
-    		String sql = "SELECT o FROM Order o order by o.id desc";
+    		String sql = "SELECT o FROM Order o WHERE o.orderDate Between :start AND :end order by o.id desc";
     		List<Order> orders2 = em.<Order>createQuery(sql, Order.class)
-    				.setFirstResult(1) //0으로 시작하면 결과에서 첫번째 row부터 가져오는 것 이므로 limit만 설정하여 쿼리가 실행된다.
+    				.setParameter("start", LocalDateTime.of(2020, Month.JULY, 26, 0, 0, 0, 111))
+    				.setParameter("end", LocalDateTime.of(2020, Month.JULY, 26, 1, 50, 0, 111))
+    				.setFirstResult(1) //0으로 시작하면 정렬까지 다 된 결과에서 첫번째 row부터 가져오는 것 이므로 limit만 설정하여 쿼리가 실행된다.
     				.setMaxResults(5)
     				.getResultList();
+    		orders2.stream().forEach(i->System.out.println(i.getId()));
     		tx.commit();
     	}catch(Exception e){
     		e.printStackTrace();
