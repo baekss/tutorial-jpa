@@ -10,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.BatchSize;
+
 @Entity
 public class Client extends BaseEntity {
 	
@@ -21,6 +23,7 @@ public class Client extends BaseEntity {
 	@Column(length=10)
 	private String name;
 	
+	@BatchSize(size=100) //fetch join 시 1에 대한 N을 조회할 쿼리가 날라갈 때 IN 절로 일괄 조회를 할 수 있도록 한다.
 	@OneToMany(mappedBy="client") //매핑 관계의 주인인 Order 객체가 Client 객체와 join을 맺을 때 사용한 필드가 mappedBy 연관관계를 나타낸다. 읽기전용 속성으로 jpa의해 쓰기, 수정 등이 관리되지 않는다.
 	private List<Order> orders = new ArrayList<Order>();
 	
