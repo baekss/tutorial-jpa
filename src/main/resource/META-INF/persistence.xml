@@ -14,7 +14,7 @@ xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org
 		<property name="hibernate.show_sql" value="true"/>
 		<property name="hibernate.format_sql" value="true"/>
 		<property name="hibernate.use_sql_comments" value="true"/>
-		<property name="hibernate.hbm2ddl.auto" value="create"/>
+		<property name="hibernate.hbm2ddl.auto" value="update"/>
 		</properties>
 	</persistence-unit>
 	
@@ -30,7 +30,9 @@ xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org
 		<property name="hibernate.show_sql" value="true"/>
 		<property name="hibernate.format_sql" value="true"/>
 		<property name="hibernate.use_sql_comments" value="true"/>
-		<property name="hibernate.hbm2ddl.auto" value="create"/>
+		<property name="hibernate.hbm2ddl.auto" value="none"/>
+		<!-- fetch join 시 1에 대한 N을 조회할 쿼리가 날라갈 때 IN 절로 일괄 조회를 할 수 있도록 한다. -->
+		<property name="hibernate.default_batch_fetch_size" value="100"/>
 		</properties>
 	</persistence-unit>
 </persistence>

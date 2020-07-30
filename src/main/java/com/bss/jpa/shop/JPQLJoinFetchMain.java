@@ -75,6 +75,26 @@ public class JPQLJoinFetchMain {
     		orders2.get(0).getClient().getCity();
     		
     		//JPQL DISTINCT 펑션을 사용하지 않으면 1:N 관계에서 N만큼 1에 해당하는 동일한 객체가 생성됨. 쿼리 조인 결과가 N만큼의 튜플로 나올거기 때문이다(이러한 이유로 페이징 api도 사용불가, 페이징은 꼭 1:1, N:1 일때만 사용!).
+    		/**
+	    	select
+	            distinct client0_.CLIENT_ID as CLIENT_I1_4_0_,
+	            orders1_.ORDER_ID as ORDER_ID1_14_1_,
+	            client0_.city as city2_4_0_,
+	            client0_.street as street3_4_0_,
+	            client0_.zipcode as zipcode4_4_0_,
+	            client0_.name as name5_4_0_,
+	            orders1_.FK_CLIENT_ID as FK_CLIEN4_14_1_,
+	            orders1_.DELIVERY_ID as DELIVERY5_14_1_,
+	            orders1_.orderDate as orderDat2_14_1_,
+	            orders1_.status as status3_14_1_,
+	            orders1_.FK_CLIENT_ID as FK_CLIEN4_14_0__,
+	            orders1_.ORDER_ID as ORDER_ID1_14_0__ 
+	        from
+	            Client client0_ 
+	        inner join
+	            ORDERS orders1_ 
+	                on client0_.CLIENT_ID=orders1_.FK_CLIENT_ID
+    		*/
     		List<Client> clients = em.createQuery("SELECT DISTINCT c FROM Client c inner join fetch c.orders", Client.class).getResultList();
     		for(Client client : clients){
     			System.out.println("주문내역 : "+client.getOrders().size()+", 고객아이디, 이름 : "+client.getId()+" "+client.getName());

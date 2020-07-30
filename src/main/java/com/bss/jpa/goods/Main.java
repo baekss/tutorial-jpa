@@ -26,6 +26,10 @@ public class Main {
     		
     		em.persist(movie);
     		
+    		Album album = new Album("ItanoTomomi");
+    		album.setName("KiminiOkuruUta");
+    		album.setPrice(23000);
+    		em.persist(album);
     		//부모 객체와 inner join
 			/*
 			from
@@ -63,7 +67,7 @@ public class Main {
     		//clear 했으면 영속객체가 될수 있도록 만든다.
     		Movie mv = em.find(Movie.class, movie.getId());
     		mv.setDirector("손상향");
-    		
+    		mv.setName("코믹만화");
     		System.out.println("---------------------TYPE Query---------------------");
     		//@DiscriminatorColumn 으로 생성한 DTYPE 컬럼으로 부모 테이블에서 해당하는 자식 테이블 정보를 조회한다.
     		List<Goods> list = em.createQuery("SELECT g FROM Goods g WHERE TYPE(g) = :p", Goods.class).setParameter("p", Movie.class).getResultList();
@@ -118,6 +122,38 @@ public class Main {
 	            goods0_3_.director='손상향'
     		*/
     		em.createQuery("SELECT g FROM Goods g where treat(g as Movie).director = '손상향'", Goods.class).getResultList();
+    		
+    		//Entity에 설정한 NamedQuery가 실행된다.
+    		/**
+		    select
+		        album0_.id as id2_8_,
+		        album0_1_.name as name3_8_,
+		        album0_1_.price as price4_8_,
+		        album0_.artist as artist1_0_ 
+		    from
+		        Album album0_ 
+		    inner join
+		        Goods album0_1_ 
+		            on album0_.id=album0_1_.id 
+		    where
+		        album0_.artist=?
+    		*/
+    		List<Album> albumResult = em.createNamedQuery("Album.findByArtist", Album.class)
+    			.setParameter("artist", "ItanoTomomi")
+    			.getResultList();
+    		System.out.println(albumResult.get(0).getArtist());
+    		
+    		//Bulk 연산
+    		int updatedRows = em.createQuery("UPDATE Goods g SET g.price=g.price+100 WHERE g.name LIKE CONCAT(:name,'%')")
+    			.setParameter("name", "코믹")
+    			.executeUpdate();
+    		
+    		em.createQuery("UPDATE Movie m SET m.actor=:actor")
+        			.setParameter("actor", "감녕")
+        			.executeUpdate();
+    		//1차 캐시를 이용하지 않도록 Bulk 연산 후 영속성 컨텍스트 비움
+    		em.clear();
+    		System.out.println(updatedRows);
     		tx.commit();
     	}catch(Exception e){
     		e.printStackTrace();
